@@ -2,6 +2,8 @@
 
 Exploring various proc gen tools.
 
+Goal of having a nice 2D dungeon/terrain generator for a top down tile based game.
+
 ## Summary
 
 ## Getting Started
@@ -9,6 +11,7 @@ Exploring various proc gen tools.
 **Building**
 
 ```bash
+git clone <url>
 git submodule update --init --recursive
 mkdir build
 cd build
