@@ -1,8 +1,10 @@
 #pragma once
 
+#include "gui/component.hpp"
 #include "gui/display.hpp"
 
 #include <chrono>
+#include <vector>
 
 using namespace std;
 
@@ -11,12 +13,14 @@ extern int FPS;
 class GUI
 {
 public:
-  GUI();
+  GUI(int w, int h);
 
   void run(void);
   void update(long delta);
   void render(long delta);
   void close();
+
+  void add_component(std::shared_ptr<Component> comp);
 
   int fps();
   Display &get_display();
@@ -31,6 +35,9 @@ private:
 
   // Control actually rendering and display
   Display display;
+
+  // All top level components to render and update
+  std::vector<std::shared_ptr<Component>> components;
 
   // Frames per second
   int frames_per_second = 0;

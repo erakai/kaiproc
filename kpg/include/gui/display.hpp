@@ -2,6 +2,8 @@
 
 #include "SDL_render.h"
 #include "gui/color.hpp"
+#include "gui/component.hpp"
+#include "gui/framebuffer.hpp"
 
 #include <string>
 
@@ -13,7 +15,8 @@ public:
   Display(int screen_width, int screen_height, std::string title,
           Color clear_color);
 
-  void render(const long delta);
+  void render(std::vector<std::shared_ptr<Component>> components,
+              const long delta);
   bool is_initialized() { return initialized; }
 
   void close();
@@ -26,6 +29,9 @@ private:
 
   SDL_Window *window = nullptr;
   SDL_Renderer *renderer = nullptr;
+
+  FrameBuffer<uint32_t> fb;
+  SDL_Texture *frame_texture = nullptr;
 
   void initialize_imgui();
 };

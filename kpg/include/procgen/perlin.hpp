@@ -23,7 +23,7 @@ Seeds the permutation vector by shuffling it, using p\_seed. Should be called
 before every new use. If p\_seed is -1, will use the reference permutation given
 in the paper.
 */
-void seed(int p_seed);
+void seed(int p_seed = -1);
 
 /*
 Returns a 3D noise value in [0, 1]. Call seed() first.

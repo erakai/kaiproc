@@ -8,9 +8,9 @@
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
 
-int FPS = 120;
+int FPS = 60;
 
-GUI::GUI() : display(1280, 720, "KaiProc", {33, 37, 54})
+GUI::GUI(int w, int h) : display(w, h, "KaiProc", {0xFF, 0xFF, 0xFF})
 {
 }
 
@@ -82,11 +82,18 @@ void GUI::close()
 
 void GUI::update(long delta)
 {
+  for (auto comp : components)
+    comp->update(delta);
 }
 
 void GUI::render(long delta)
 {
-  display.render(delta);
+  display.render(components, delta);
+}
+
+void GUI::add_component(std::shared_ptr<Component> comp)
+{
+  components.push_back(comp);
 }
 
 int GUI::fps()

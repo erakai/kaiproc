@@ -1,3 +1,5 @@
+#pragma once
+
 #include "SDL_error.h"
 #include <chrono>
 #include <filesystem>
