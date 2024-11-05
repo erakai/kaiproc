@@ -44,6 +44,7 @@ set(KPG_SOURCES
    kpg/src/main.cpp
    kpg/src/procgen/perlin.cpp
    kpg/src/procgen/noisemap.cpp
+   kpg/src/procgen/debugwin.cpp
    kpg/src/gui/gui.cpp
    kpg/src/gui/input.cpp
    kpg/src/gui/display.cpp

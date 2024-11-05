@@ -9,6 +9,8 @@
 using namespace std;
 
 extern int FPS;
+extern int frames_per_second;
+extern float frametime;
 
 class GUI
 {
@@ -40,8 +42,6 @@ private:
   std::vector<std::shared_ptr<Component>> components;
 
   // Frames per second
-  int frames_per_second = 0;
-  float frametime = 0;
   long ms_counter = 0;
   int frames_in_last_second = 0;
 };

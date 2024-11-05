@@ -1,6 +1,7 @@
 #include "gui/input.hpp"
 #include "SDL_keycode.h"
 #include "imgui.h"
+#include "imgui_impl_sdl2.h"
 
 namespace input
 {
@@ -14,6 +15,8 @@ bool poll_event_loop()
   bool quit = false;
   while (SDL_PollEvent(&e))
   {
+    ImGui_ImplSDL2_ProcessEvent(&e);
+
     if (e.type == SDL_QUIT)
     {
       quit = true;

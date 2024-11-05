@@ -4,15 +4,18 @@
 
 NoiseMap::NoiseMap(int w, int h) : map(w, h)
 {
-  perlin::seed();
+  generate_map();
+}
+
+void NoiseMap::generate_map()
+{
+  perlin::seed(seed);
 
   Color white = {255, 255, 255};
-
-  for (int y = 0; y < h; y++)
+  for (int y = 0; y < map.h; y++)
   {
-    for (int x = 0; x < w; x++)
+    for (int x = 0; x < map.w; x++)
     {
-      float frequency = 0.01;
       double scalar = perlin::noise(x * frequency, y * frequency);
       Color col = white * scalar;
 
@@ -23,6 +26,7 @@ NoiseMap::NoiseMap(int w, int h) : map(w, h)
 
 void NoiseMap::render(FrameBuffer<uint32_t> fb, long delta)
 {
+  // generate_map();
   for (int y = 0; y < fb.h; y++)
   {
     for (int x = 0; x < fb.w; x++)
