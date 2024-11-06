@@ -10,10 +10,10 @@ DebugWin::DebugWin(shared_ptr<NoiseMap> nm) : nm(nm)
 {
 }
 
-void DebugWin::render(FrameBuffer<uint32_t> fb, long delta)
+void DebugWin::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
 {
   ImGui::SetNextWindowPos({870, 10}, ImGuiCond_Once);
-  ImGui::SetNextWindowSize({400, 260}, ImGuiCond_Once);
+  ImGui::SetNextWindowSize({400, 365}, ImGuiCond_Once);
 
   ImGui::Begin("Debug");
   ImGui::Text("ImGUI: %.3f ms/frame (%.1f FPS)",
@@ -26,18 +26,32 @@ void DebugWin::render(FrameBuffer<uint32_t> fb, long delta)
   ImGui::Spacing();
   ImGui::Text("Seed");
   ImGui::SliderInt("##seed", &nm->seed, -1, 500);
-  ImGui::Text("Frequency");
-  ImGui::SliderFloat("##freq", &nm->frequency, 0.001, 1);
+  ImGui::Text("Frequency (Zoom)");
+  ImGui::SliderFloat("##freq", &nm->params.frequency, 0.5, 0.001);
+  ImGui::Text("Octaves (Detail)");
+  ImGui::SliderInt("##oct", &nm->params.octaves, 1, 25);
+  ImGui::Text("Amplitude (Contrast)");
+  ImGui::SliderFloat("##amp", &nm->params.amplitude, 0.35, 0.9);
   ImGui::Spacing();
   if (ImGui::Button("Generate"))
-    nm->generate_map();
+  {
+    if (fbm_selected)
+      nm->generate_map_fbm();
+    else
+      nm->generate_map_perlin();
+  }
   ImGui::SameLine();
   if (ImGui::Button("Generate++"))
   {
-    nm->generate_map();
     nm->seed++;
+    if (fbm_selected)
+      nm->generate_map_fbm();
+    else
+      nm->generate_map_perlin();
   }
-  ImGui::NewLine();
+  ImGui::Checkbox("Enable FBM", &fbm_selected);
+  ImGui::SameLine();
+  ImGui::Checkbox("Binary Colors", &nm->binary_colors);
   ImGui::SetWindowFontScale(1.2);
   ImGui::End();
 }

@@ -4,34 +4,61 @@
 
 NoiseMap::NoiseMap(int w, int h) : map(w, h)
 {
-  generate_map();
+  generate_map_fbm();
 }
 
-void NoiseMap::generate_map()
+uint32_t NoiseMap::scalar_to_color(float scalar)
+{
+  if (!binary_colors)
+    return (color_to_int(cwhite * scalar));
+
+  if (scalar > 0.5)
+    return color_to_int(cwhite);
+  return color_to_int(cblack);
+}
+
+void NoiseMap::generate_map_perlin()
 {
   perlin::seed(seed);
 
-  Color white = {255, 255, 255};
   for (int y = 0; y < map.h; y++)
   {
     for (int x = 0; x < map.w; x++)
     {
-      double scalar = perlin::noise(x * frequency, y * frequency);
-      Color col = white * scalar;
-
-      map.set(y, x, color_to_int(col));
+      double scalar = perlin::noise(x * params.frequency, y * params.frequency);
+      map.set(y, x, scalar_to_color(scalar));
     }
   }
 }
 
-void NoiseMap::render(FrameBuffer<uint32_t> fb, long delta)
+void NoiseMap::generate_map_fbm()
 {
-  // generate_map();
-  for (int y = 0; y < fb.h; y++)
+  perlin::seed(seed);
+
+  for (int y = 0; y < map.h; y++)
   {
-    for (int x = 0; x < fb.w; x++)
+    for (int x = 0; x < map.w; x++)
     {
-      fb.set(y, x, map.get(y, x));
+      double scalar =
+          fbm::gen(x * params.frequency, y * params.frequency, params);
+
+      map.set(y, x, scalar_to_color(scalar));
+    }
+  }
+}
+
+void NoiseMap::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
+{
+  for (int y = 0; y < map.h; y++)
+  {
+    for (int x = 0; x < map.w; x++)
+    {
+      int nx = x;
+      int ny = y;
+      if (!camera.project(nx, ny))
+        continue;
+
+      fb.set(ny, nx, map.get(y, x));
     }
   }
 }

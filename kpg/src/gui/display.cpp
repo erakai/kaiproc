@@ -3,15 +3,17 @@
 
 #include "SDL_image.h"
 #include "SDL_video.h"
+#include "gui/camera.hpp"
 #include "gui/component.hpp"
 #include "utils/logger.hpp"
 
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
 
-Display::Display(int screen_width, int screen_height, std::string title,
-                 Color clear_color)
-    : clear_color(clear_color), fb(screen_width, screen_height)
+SDL_PixelFormat *PIXEL_FORMAT = nullptr;
+
+Display::Display(int screen_width, int screen_height, std::string title)
+    : fb(screen_width, screen_height)
 {
   if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
   {
@@ -50,6 +52,14 @@ Display::Display(int screen_width, int screen_height, std::string title,
 
   initialized = true;
   log("Display initialized", ll::NOTE);
+
+  // Retrieve pixel format
+  SDL_RendererInfo info;
+  SDL_GetRendererInfo(renderer, &info);
+  if (info.num_texture_formats > 0)
+  {
+    PIXEL_FORMAT = SDL_AllocFormat(info.texture_formats[0]);
+  }
 }
 
 void Display::initialize_imgui()
@@ -85,17 +95,17 @@ void Display::close()
 }
 
 void Display::render(std::vector<std::shared_ptr<Component>> components,
-                     const long delta)
+                     Camera camera, const long delta)
 {
-  SDL_SetRenderDrawColor(renderer, clear_color.r, clear_color.g, clear_color.b,
-                         clear_color.a);
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderClear(renderer);
 
-  fb.clear();
+  for (int i = 0; i < fb.w * fb.h; i++)
+    fb.pix[i] = 0xFFFFFFFF;
 
   for (std::shared_ptr<Component> comp : components)
   {
-    comp->render(fb, delta);
+    comp->render(fb, camera, delta);
   }
 
   SDL_UpdateTexture(frame_texture, NULL, fb.pix, fb.w * sizeof(uint32_t));

@@ -1,13 +1,15 @@
 #pragma once
 
+#include "SDL_pixels.h"
+#include "gui/display.hpp"
 #include <cstdint>
 
 struct Color
 {
-  int r = 0;   // 0 to 255
-  int g = 0;   // 0 to 255
-  int b = 0;   // 0 to 255
-  int a = 255; // 0 to 255
+  uint8_t r = 0;   // 0 to 255
+  uint8_t g = 0;   // 0 to 255
+  uint8_t b = 0;   // 0 to 255
+  uint8_t a = 255; // 0 to 255
 
   Color operator*(const float c) const
   {
@@ -27,24 +29,19 @@ struct Color
     if (new_b < 0)
       new_b = 0;
 
-    return {new_r, new_g, new_b, a};
+    return {static_cast<uint8_t>(new_r), static_cast<uint8_t>(new_g),
+            static_cast<uint8_t>(new_b), a};
   }
 };
+
+const Color cwhite = {255, 255, 255, 255};
+const Color cred = {255, 0, 0, 255};
+const Color cgreen = {0, 255, 0, 255};
+const Color cblue = {0, 0, 255, 255};
+const Color cblack = {0, 0, 0, 255};
 
 inline uint32_t color_to_int(Color c)
 {
   // Returns a uint32_t in the form of 0xAABBGGRR
-  return (static_cast<uint32_t>(c.a) << 24) |
-         (static_cast<uint32_t>(c.b) << 16) |
-         (static_cast<uint32_t>(c.g) << 8) | static_cast<uint32_t>(c.r);
-}
-
-inline Color int_to_color(uint32_t i)
-{
-  Color c;
-  c.r = (i >> 24) & 0xFF;
-  c.g = (i >> 16) & 0xFF;
-  c.b = (i >> 8) & 0xFF;
-  c.a = i & 0xFF;
-  return c;
+  return SDL_MapRGBA(PIXEL_FORMAT, c.r, c.g, c.b, c.a);
 }

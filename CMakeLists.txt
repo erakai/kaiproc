@@ -45,8 +45,10 @@ set(KPG_SOURCES
    kpg/src/procgen/perlin.cpp
    kpg/src/procgen/noisemap.cpp
    kpg/src/procgen/debugwin.cpp
+   kpg/src/procgen/fbm.cpp
    kpg/src/gui/gui.cpp
    kpg/src/gui/input.cpp
+   kpg/src/gui/camera.cpp
    kpg/src/gui/display.cpp
    kpg/src/utils/logger.cpp)
 

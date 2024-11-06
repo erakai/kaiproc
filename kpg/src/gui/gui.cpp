@@ -12,7 +12,7 @@ int FPS = 120;
 int frames_per_second = 0;
 float frametime = 0;
 
-GUI::GUI(int w, int h) : display(w, h, "KaiProc", {0xFF, 0xFF, 0xFF})
+GUI::GUI(int w, int h) : camera(w, h), display(w, h, "KaiProc")
 {
 }
 
@@ -90,7 +90,7 @@ void GUI::update(long delta)
 
 void GUI::render(long delta)
 {
-  display.render(components, delta);
+  display.render(components, camera, delta);
 }
 
 void GUI::add_component(std::shared_ptr<Component> comp)
