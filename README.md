@@ -27,3 +27,4 @@ make
 ## Screenshots
 
 ![perlin](screenshots/perlin.jpeg)
+![fbm](screenshots/fbm.png)

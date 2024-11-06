@@ -12,8 +12,8 @@ DebugWin::DebugWin(shared_ptr<NoiseMap> nm) : nm(nm)
 
 void DebugWin::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
 {
-  ImGui::SetNextWindowPos({870, 10}, ImGuiCond_Once);
-  ImGui::SetNextWindowSize({400, 365}, ImGuiCond_Once);
+  ImGui::SetNextWindowPos({970, 10}, ImGuiCond_Once);
+  ImGui::SetNextWindowSize({300, 365}, ImGuiCond_Once);
 
   ImGui::Begin("Debug");
   ImGui::Text("ImGUI: %.3f ms/frame (%.1f FPS)",
