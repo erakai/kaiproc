@@ -8,8 +8,8 @@
 
 using namespace std;
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1280
+#define HEIGHT 720
 
 int main(int argc, char **argv)
 {

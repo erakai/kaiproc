@@ -49,7 +49,8 @@ void NoiseMap::generate_map_fbm()
   }
 }
 
-void NoiseMap::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
+void NoiseMap::render(FrameBuffer<uint32_t> fb, std::shared_ptr<Camera> camera,
+                      long delta)
 {
   for (int y = 0; y < map.h; y++)
   {
@@ -57,10 +58,10 @@ void NoiseMap::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
     {
       int nx = x;
       int ny = y;
-      if (!camera.project(nx, ny))
+      if (!camera->project(nx, ny))
         continue;
 
-      fb.raster_rect(nx, ny, camera.pixel_size, camera.pixel_size,
+      fb.raster_rect(nx, ny, camera->pixel_size, camera->pixel_size,
                      map.get(y, x));
     }
   }

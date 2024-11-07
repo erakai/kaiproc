@@ -16,8 +16,8 @@ class Display
 public:
   Display(int screen_width, int screen_height, std::string title);
 
-  void render(std::vector<std::shared_ptr<Component>> components, Camera camera,
-              const long delta);
+  void render(std::vector<std::shared_ptr<Component>> components,
+              std::shared_ptr<Camera> camera, const long delta);
   bool is_initialized() { return initialized; }
 
   void close();

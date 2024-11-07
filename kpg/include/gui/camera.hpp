@@ -20,6 +20,7 @@ public:
 
   // Sets the current pixel_size
   void set_pixel_size(int nps);
+  void set_max_pixel_size(int new_max);
 
   float cam_x = 0;
   float cam_y = 0;
@@ -30,12 +31,12 @@ public:
   the camera should project anything between (0, 0) and (5, 5) as black.
   */
   int pixel_size = 1;
-  const float max_pixel_size = 10;
+  float max_pixel_size = 10;
 
   // Used to smoothly transition between discrete pixel_size values
   float zoom_level = 0;
   const float min_zoom = 0; // arbitrary value
-  const float max_zoom = 5; // arbitrary value
+  float max_zoom = 5;       // arbitrary value
 
   // display width, height
   int w, h;

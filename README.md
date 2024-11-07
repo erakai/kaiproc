@@ -26,5 +26,5 @@ make
 ```
 ## Screenshots
 
-![perlin](screenshots/perlin.jpeg)
-![fbm](screenshots/fbm.png)
+![one](screenshots/one.jpeg)
+![two](screenshots/two.png)

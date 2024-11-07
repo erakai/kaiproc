@@ -95,7 +95,7 @@ void Display::close()
 }
 
 void Display::render(std::vector<std::shared_ptr<Component>> components,
-                     Camera camera, const long delta)
+                     std::shared_ptr<Camera> camera, const long delta)
 {
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderClear(renderer);

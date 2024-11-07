@@ -10,7 +10,8 @@ DebugWin::DebugWin(shared_ptr<NoiseMap> nm) : nm(nm)
 {
 }
 
-void DebugWin::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
+void DebugWin::render(FrameBuffer<uint32_t> fb, std::shared_ptr<Camera> camera,
+                      long delta)
 {
   // =========================================== Generation
 
@@ -61,22 +62,30 @@ void DebugWin::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
   // =========================================== Camera
 
   ImGui::SetNextWindowPos({pos.x, pos.y + size.y});
-  ImGui::SetNextWindowSize({size.x, 160}, ImGuiCond_Once);
+  ImGui::SetNextWindowSize({size.x, 205}, ImGuiCond_Once);
   ImGui::Begin("Camera");
-  ImGui::Text("Pixel Size: %d", camera.pixel_size);
-  float current = camera.pixel_size;
-  float new_value = current;
-  ImGui::SliderFloat("##pixel", &new_value, 1, camera.max_pixel_size);
-  if (current != new_value)
+  ImGui::Text("Pixel Size");
+  int current_zoom = camera->pixel_size;
+  int new_zoom = current_zoom;
+  ImGui::SliderInt("##pixel", &new_zoom, 1, camera->max_pixel_size);
+  if (current_zoom != new_zoom)
   {
-    camera.set_pixel_size(new_value);
+    camera->set_pixel_size(new_zoom);
   }
-  ImGui::Text("Zoom level: %f", camera.zoom_level);
-  ImGui::Text("Camera Pos: (%f, %f)", camera.cam_x, camera.cam_y);
-  ImGui::Text("Mouse Pos: (%d, %d)", camera.mouse_x, camera.mouse_y);
+  ImGui::Text("Max Pixel Size");
+  int current_max_zoom = camera->max_pixel_size;
+  int new_max_zoom = current_max_zoom;
+  ImGui::SliderInt("##maxpixel", &new_max_zoom, 1, 100);
+  if (current_max_zoom != new_max_zoom)
+  {
+    camera->set_max_pixel_size(new_max_zoom);
+  }
+  ImGui::Text("Zoom level: %f", camera->zoom_level);
+  ImGui::Text("Camera Pos: (%f, %f)", camera->cam_x, camera->cam_y);
+  ImGui::Text("Mouse Pos: (%d, %d)", camera->mouse_x, camera->mouse_y);
   ImGui::Text("Mouse World Pos: (%d, %d)",
-              (camera.mouse_x / camera.pixel_size) + (int) camera.cam_x,
-              (camera.mouse_y / camera.pixel_size) + (int) camera.cam_y);
+              (camera->mouse_x / camera->pixel_size) + (int) camera->cam_x,
+              (camera->mouse_y / camera->pixel_size) + (int) camera->cam_y);
   ImGui::SetWindowFontScale(1.2);
   ImGui::End();
 }

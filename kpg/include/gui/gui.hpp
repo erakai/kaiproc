@@ -36,7 +36,7 @@ private:
   chrono::system_clock::time_point b;
 
   // Control actually rendering and display
-  Camera camera;
+  std::shared_ptr<Camera> camera;
   Display display;
 
   // All top level components to render and update

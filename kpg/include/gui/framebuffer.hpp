@@ -27,6 +27,15 @@ public:
 
   void raster_rect(int x, int y, int rw, int rh, T val)
   {
+    clip_rect(x, y, rw, rh, w, h);
+
+    for (int r = y; r < y + rh; r++)
+      for (int c = x; c < x + rw; c++)
+        set(r, c, val);
+  }
+
+  void clip_rect(int &x, int &y, int &rw, int &rh, int w, int h)
+  {
     if (y >= h || x >= w)
       return;
     if (x + rw >= w)
@@ -37,10 +46,6 @@ public:
       rh = h - y;
     if (y < 0)
       y = 0;
-
-    for (int r = y; r < y + rh; r++)
-      for (int c = x; c < x + rw; c++)
-        set(r, c, val);
   }
 
   void clear()

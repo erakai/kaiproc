@@ -12,8 +12,9 @@ int FPS = 120;
 int frames_per_second = 0;
 float frametime = 0;
 
-GUI::GUI(int w, int h) : camera(w, h), display(w, h, "KaiProc")
+GUI::GUI(int w, int h) : display(w, h, "KaiProc")
 {
+  camera = std::shared_ptr<Camera>(new Camera(w, h));
 }
 
 void GUI::run(void)

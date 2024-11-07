@@ -1,7 +1,6 @@
 #include "gui/camera.hpp"
 #include "SDL_events.h"
 #include "gui/input.hpp"
-#include "utils/logger.hpp"
 
 Camera::Camera(int w, int h, int initial_pixel_size) : w(w), h(h)
 {
@@ -96,15 +95,24 @@ void Camera::set_pixel_size(int nps)
 {
   if (nps > max_pixel_size || nps < 0)
     return;
+  if (nps == pixel_size)
+    return;
 
   float effective_zoom = (nps - 1) / (float) max_pixel_size;
   effective_zoom /= 2;
   effective_zoom += 0.5;
   float new_zoom_level = log(effective_zoom / (1 - effective_zoom)) + 0.01;
 
-  log("%d %f", nps, new_zoom_level, ll::NOTE);
-
   zoom(w / 2, h / 2, new_zoom_level - zoom_level);
+}
+
+void Camera::set_max_pixel_size(int new_max)
+{
+  max_pixel_size = new_max;
+  max_zoom = 0.5f * new_max;
+  if (pixel_size > max_pixel_size)
+    pixel_size = max_pixel_size;
+  set_pixel_size(pixel_size);
 }
 
 void Camera::mouse_input(int type, int button, int x, int y, int mw)
