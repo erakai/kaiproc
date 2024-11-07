@@ -8,11 +8,14 @@
 
 using namespace std;
 
+#define WIDTH 800
+#define HEIGHT 800
+
 int main(int argc, char **argv)
 {
-  GUI gui(1280, 640);
+  GUI gui(WIDTH, HEIGHT);
 
-  shared_ptr<NoiseMap> nm = shared_ptr<NoiseMap>(new NoiseMap(1280, 640));
+  shared_ptr<NoiseMap> nm = shared_ptr<NoiseMap>(new NoiseMap(WIDTH, HEIGHT));
   gui.add_component(nm);
 
   shared_ptr<DebugWin> db = shared_ptr<DebugWin>(new DebugWin(nm));

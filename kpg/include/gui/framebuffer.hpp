@@ -1,12 +1,11 @@
 #pragma once
 
-#include <cstdint>
 #include <stdexcept>
 
 template <typename T> class FrameBuffer
 {
 public:
-  FrameBuffer(int w, int h) : w(w), h(h) { pix = new uint32_t[w * h]; };
+  FrameBuffer(int w, int h) : w(w), h(h) { pix = new T[w * h]; };
 
   T get(int r, int c)
   {
@@ -17,13 +16,31 @@ public:
     return pix[(h - 1 - r) * w + c];
   };
 
-  void set(int r, int c, T it)
+  void set(int r, int c, T val)
   {
     if ((r >= h || r < 0) || (c >= w || c < 0))
     {
       throw std::invalid_argument("out of bounds for framebuffer");
     }
-    pix[(h - 1 - r) * w + c] = it;
+    pix[(h - 1 - r) * w + c] = val;
+  }
+
+  void raster_rect(int x, int y, int rw, int rh, T val)
+  {
+    if (y >= h || x >= w)
+      return;
+    if (x + rw >= w)
+      rw = w - x;
+    if (x < 0)
+      x = 0;
+    if (y + rh >= h)
+      rh = h - y;
+    if (y < 0)
+      y = 0;
+
+    for (int r = y; r < y + rh; r++)
+      for (int c = x; c < x + rw; c++)
+        set(r, c, val);
   }
 
   void clear()

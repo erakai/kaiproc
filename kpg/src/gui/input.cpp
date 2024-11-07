@@ -8,8 +8,11 @@ namespace input
 {
 
 std::vector<std::function<void(SDL_Keycode key)>> key_callbacks;
-std::vector<std::function<void(int type, int button, int x, int y)>>
+std::vector<std::function<void(int type, int button, int x, int y, int wheel)>>
     mouse_callbacks;
+
+int mouse_x = 0;
+int mouse_y = 0;
 
 // Returns true if the gui loop should continue
 bool poll_event_loop()
@@ -47,12 +50,17 @@ bool poll_event_loop()
 
     if (!io.WantCaptureMouse)
     {
+      if (e.type == SDL_MOUSEMOTION)
+      {
+        mouse_x = e.motion.x;
+        mouse_y = e.motion.y;
+      }
       if (e.type == SDL_MOUSEBUTTONUP || e.type == SDL_MOUSEBUTTONDOWN ||
           e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEWHEEL)
       {
         for (auto func : mouse_callbacks)
         {
-          func(e.type, e.button.button, e.motion.x, e.motion.y);
+          func(e.type, e.button.button, mouse_x, mouse_y, e.wheel.y);
         }
       }
     }

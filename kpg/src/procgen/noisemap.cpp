@@ -10,11 +10,13 @@ NoiseMap::NoiseMap(int w, int h) : map(w, h)
 uint32_t NoiseMap::scalar_to_color(float scalar)
 {
   if (!binary_colors)
-    return (color_to_int(cwhite * scalar));
+    return (color_to_int(cwhite * (1 - scalar)));
 
-  if (scalar > 0.5)
-    return color_to_int(cwhite);
-  return color_to_int(cblack);
+  if (scalar > 0.51)
+    return color_to_int(cgreen);
+  if (scalar > 0.49)
+    return color_to_int(cblack);
+  return color_to_int(cblue);
 }
 
 void NoiseMap::generate_map_perlin()
@@ -58,7 +60,8 @@ void NoiseMap::render(FrameBuffer<uint32_t> fb, Camera camera, long delta)
       if (!camera.project(nx, ny))
         continue;
 
-      fb.set(ny, nx, map.get(y, x));
+      fb.raster_rect(nx, ny, camera.pixel_size, camera.pixel_size,
+                     map.get(y, x));
     }
   }
 }
